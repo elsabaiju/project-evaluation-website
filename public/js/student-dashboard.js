@@ -51,7 +51,9 @@ function showSuccess(message) {
 }
 
 function formatDate(dateString) {
+    if (!dateString) return 'Not available';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Invalid date';
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
 
