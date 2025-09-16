@@ -260,11 +260,19 @@ function renderSubmissions() {
 
 // Open evaluation modal
 function openEvaluationModal(submissionId) {
+    console.log('Opening evaluation modal for submission:', submissionId);
     const submission = submissions.find(s => s._id === submissionId);
-    if (!submission) return;
+    if (!submission) {
+        console.error('Submission not found:', submissionId);
+        showError('Submission not found');
+        return;
+    }
     
     const modal = document.getElementById('evaluationModal');
     const form = document.getElementById('evaluationForm');
+    
+    console.log('Modal element:', modal);
+    console.log('Form element:', form);
     
     if (modal && form) {
         // Populate form with existing data if already evaluated
@@ -274,32 +282,50 @@ function openEvaluationModal(submissionId) {
         document.getElementById('evaluationFeedback').value = submission.feedback || '';
         document.getElementById('evaluationComment').value = submission.comment || '';
         
-        // Update modal title and submission info
-        document.getElementById('evaluationModalTitle').textContent = submission.isEvaluated ? 'Edit Evaluation' : 'Grade Submission';
-        document.getElementById('evaluationSubmissionInfo').innerHTML = `
-            <p><strong>Assignment:</strong> ${submission.assignmentTitle}</p>
-            <p><strong>Student:</strong> ${submission.student.fullName}</p>
-            <p><strong>Max Marks:</strong> ${submission.assignmentMaxMarks}</p>
-            <p><strong>Submitted:</strong> ${formatDate(submission.submittedAt)}</p>
-            ${submission.fileName ? `<p><strong>File:</strong> ${submission.fileName} (${formatFileSize(submission.fileSize)})</p>` : ''}
-        `;
+        // Update submission info in the modal
+        const submissionDetails = document.getElementById('submissionDetails');
+        if (submissionDetails) {
+            submissionDetails.innerHTML = `
+                <h4>Submission Details</h4>
+                <p><strong>Assignment:</strong> ${submission.assignmentTitle}</p>
+                <p><strong>Student:</strong> ${submission.student.fullName}</p>
+                <p><strong>Max Marks:</strong> ${submission.assignmentMaxMarks}</p>
+                <p><strong>Submitted:</strong> ${formatDate(submission.submittedAt)}</p>
+                ${submission.fileName ? `<p><strong>File:</strong> ${submission.fileName} (${formatFileSize(submission.fileSize)})</p>` : ''}
+            `;
+        }
         
         modal.style.display = 'flex';
+        console.log('Modal opened successfully');
+    } else {
+        console.error('Modal or form elements not found');
+        showError('Could not open grading modal');
     }
 }
 
 // Download file
 async function downloadFile(submissionId) {
     try {
+        console.log('Downloading file for submission:', submissionId);
         const response = await fetch(`${API_BASE}/assignments/submissions/${submissionId}/download`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
         
+        console.log('Download response status:', response.status);
+        console.log('Download response headers:', response.headers);
+        
         if (response.ok) {
             const blob = await response.blob();
             const submission = submissions.find(s => s._id === submissionId);
+            console.log('Found submission:', submission);
+            
+            if (!submission || !submission.fileName) {
+                showError('File information not found');
+                return;
+            }
+            
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
@@ -309,8 +335,11 @@ async function downloadFile(submissionId) {
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+            console.log('File download initiated');
         } else {
-            showError('Failed to download file');
+            const errorData = await response.json();
+            console.error('Download error response:', errorData);
+            showError(errorData.message || 'Failed to download file');
         }
     } catch (error) {
         console.error('Error downloading file:', error);
