@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const Assignment = require('../models/Assignment');
 const Submission = require('../models/Submission');
@@ -8,10 +9,16 @@ const { auth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Configure multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+        cb(null, uploadsDir);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -166,58 +173,77 @@ router.get('/:id', auth, async (req, res) => {
 });
 
 // Submit assignment (Student only)
-router.post('/:id/submit', auth, requireRole(['student']), upload.single('file'), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ message: 'Please upload a file' });
-        }
-
-        const assignment = await Assignment.findById(req.params.id);
-        if (!assignment) {
-            return res.status(404).json({ message: 'Assignment not found' });
-        }
-
-        // Check if assignment is still active and not past due date
-        if (!assignment.isActive) {
-            return res.status(400).json({ message: 'Assignment is no longer active' });
-        }
-
-        if (new Date() > assignment.dueDate) {
-            return res.status(400).json({ message: 'Assignment submission deadline has passed' });
-        }
-
-        // Check if student has already submitted
-        const existingSubmission = await Submission.findOne({
-            assignment: assignment._id,
-            student: req.user._id
-        });
-
-        if (existingSubmission) {
-            return res.status(400).json({ message: 'You have already submitted this assignment' });
-        }
-
-        const submission = new Submission({
-            assignment: assignment._id,
-            student: req.user._id,
-            filePath: req.file.path,
-            fileName: req.file.originalname,
-            fileSize: req.file.size
-        });
-
-        await submission.save();
-
-        res.status(201).json({
-            message: 'Assignment submitted successfully',
-            submission: {
-                id: submission._id,
-                fileName: submission.fileName,
-                submittedAt: submission.submittedAt
+router.post('/:id/submit', auth, requireRole(['student']), (req, res) => {
+    upload.single('file')(req, res, async (err) => {
+        try {
+            // Handle multer errors
+            if (err) {
+                console.error('Multer error:', err);
+                if (err.code === 'LIMIT_FILE_SIZE') {
+                    return res.status(400).json({ message: 'File size too large. Maximum size is 10MB.' });
+                }
+                if (err.message.includes('Only images, documents, and archives are allowed')) {
+                    return res.status(400).json({ message: 'Invalid file type. Only images, documents, and archives are allowed.' });
+                }
+                return res.status(400).json({ message: err.message || 'File upload error' });
             }
-        });
-    } catch (error) {
-        console.error('Submit assignment error:', error);
-        res.status(500).json({ message: 'Server error submitting assignment' });
-    }
+
+            if (!req.file) {
+                return res.status(400).json({ message: 'Please upload a file' });
+            }
+
+            console.log('File uploaded:', req.file);
+            console.log('Assignment ID:', req.params.id);
+            console.log('User:', req.user.username);
+
+            const assignment = await Assignment.findById(req.params.id);
+            if (!assignment) {
+                return res.status(404).json({ message: 'Assignment not found' });
+            }
+
+            // Check if assignment is still active and not past due date
+            if (!assignment.isActive) {
+                return res.status(400).json({ message: 'Assignment is no longer active' });
+            }
+
+            if (new Date() > assignment.dueDate) {
+                return res.status(400).json({ message: 'Assignment submission deadline has passed' });
+            }
+
+            // Check if student has already submitted
+            const existingSubmission = await Submission.findOne({
+                assignment: assignment._id,
+                student: req.user._id
+            });
+
+            if (existingSubmission) {
+                return res.status(400).json({ message: 'You have already submitted this assignment' });
+            }
+
+            const submission = new Submission({
+                assignment: assignment._id,
+                student: req.user._id,
+                filePath: req.file.path,
+                fileName: req.file.originalname,
+                fileSize: req.file.size
+            });
+
+            await submission.save();
+            console.log('Submission saved:', submission._id);
+
+            res.status(201).json({
+                message: 'Assignment submitted successfully',
+                submission: {
+                    id: submission._id,
+                    fileName: submission.fileName,
+                    submittedAt: submission.submittedAt
+                }
+            });
+        } catch (error) {
+            console.error('Submit assignment error:', error);
+            res.status(500).json({ message: 'Server error submitting assignment' });
+        }
+    });
 });
 
 // Get submissions for an assignment (Teacher only)
