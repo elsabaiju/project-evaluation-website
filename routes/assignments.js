@@ -45,38 +45,50 @@ const upload = multer({
 });
 
 // Create assignment (Teacher only)
-router.post('/', auth, requireRole(['teacher']), [
-    body('title').trim().isLength({ min: 3 }).withMessage('Title must be at least 3 characters'),
-    body('description').trim().isLength({ min: 10 }).withMessage('Description must be at least 10 characters'),
-    body('dueDate').custom((value) => {
-        const date = new Date(value);
-        if (isNaN(date.getTime())) {
-            throw new Error('Please provide a valid due date');
-        }
-        return true;
-    }),
-    body('maxMarks').isInt({ min: 1 }).withMessage('Max marks must be a positive integer'),
-    body('subject').trim().isLength({ min: 2 }).withMessage('Subject is required')
-], async (req, res) => {
+router.post('/', auth, requireRole(['teacher']), async (req, res) => {
     try {
-        console.log('Assignment creation request body:', req.body);
+        console.log('Assignment creation request received');
+        console.log('Request body:', req.body);
+        console.log('User:', req.user);
         
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            console.log('Validation errors:', errors.array());
-            return res.status(400).json({ errors: errors.array() });
+        const { title, description, dueDate, maxMarks, subject, instructions } = req.body;
+        
+        // Manual validation
+        if (!title || title.trim().length < 3) {
+            return res.status(400).json({ message: 'Title must be at least 3 characters' });
+        }
+        if (!description || description.trim().length < 5) {
+            return res.status(400).json({ message: 'Description must be at least 5 characters' });
+        }
+        if (!subject || subject.trim().length < 2) {
+            return res.status(400).json({ message: 'Subject is required' });
+        }
+        if (!dueDate) {
+            return res.status(400).json({ message: 'Due date is required' });
+        }
+        if (!maxMarks || parseInt(maxMarks) < 1) {
+            return res.status(400).json({ message: 'Max marks must be a positive integer' });
         }
 
-        const { title, description, dueDate, maxMarks, subject, instructions } = req.body;
+        // Convert dueDate to proper Date object
+        let parsedDueDate;
+        try {
+            parsedDueDate = new Date(dueDate);
+            if (isNaN(parsedDueDate.getTime())) {
+                return res.status(400).json({ message: 'Invalid due date format' });
+            }
+        } catch (error) {
+            return res.status(400).json({ message: 'Invalid due date format' });
+        }
 
         const assignment = new Assignment({
             title,
             description,
             teacher: req.user._id,
-            dueDate: new Date(dueDate),
+            dueDate: parsedDueDate,
             maxMarks,
             subject,
-            instructions
+            instructions: instructions || ''
         });
 
         await assignment.save();

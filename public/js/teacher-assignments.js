@@ -398,14 +398,39 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             const formData = new FormData(this);
+            const rawDueDate = formData.get('dueDate');
+            console.log('Raw due date from form:', rawDueDate);
+            
             const assignmentData = {
                 title: formData.get('title'),
                 description: formData.get('description'),
                 subject: formData.get('subject'),
-                dueDate: new Date(formData.get('dueDate')).toISOString(),
+                dueDate: rawDueDate,
                 maxMarks: parseInt(formData.get('maxMarks')),
-                instructions: formData.get('instructions')
+                instructions: formData.get('instructions') || ''
             };
+            
+            // Validate required fields on client side
+            if (!assignmentData.title || assignmentData.title.length < 3) {
+                showError('Title must be at least 3 characters');
+                return;
+            }
+            if (!assignmentData.description || assignmentData.description.length < 10) {
+                showError('Description must be at least 10 characters');
+                return;
+            }
+            if (!assignmentData.subject || assignmentData.subject.length < 2) {
+                showError('Subject is required');
+                return;
+            }
+            if (!assignmentData.dueDate) {
+                showError('Due date is required');
+                return;
+            }
+            if (!assignmentData.maxMarks || assignmentData.maxMarks < 1) {
+                showError('Max marks must be a positive number');
+                return;
+            }
             
             console.log('Creating assignment with data:', assignmentData);
             

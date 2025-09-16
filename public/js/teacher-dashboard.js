@@ -320,14 +320,40 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             const formData = new FormData(this);
+            const rawDueDate = formData.get('dueDate');
+            console.log('Raw due date from form:', rawDueDate);
+            console.log('All form data:', Object.fromEntries(formData));
+            
             const assignmentData = {
                 title: formData.get('title'),
                 description: formData.get('description'),
                 subject: formData.get('subject'),
-                dueDate: new Date(formData.get('dueDate')).toISOString(),
+                dueDate: rawDueDate,
                 maxMarks: parseInt(formData.get('maxMarks')),
-                instructions: formData.get('instructions')
+                instructions: formData.get('instructions') || ''
             };
+            
+            // Validate required fields on client side
+            if (!assignmentData.title || assignmentData.title.length < 3) {
+                showError('Title must be at least 3 characters');
+                return;
+            }
+            if (!assignmentData.description || assignmentData.description.trim().length < 5) {
+                showError('Description must be at least 5 characters');
+                return;
+            }
+            if (!assignmentData.subject || assignmentData.subject.length < 2) {
+                showError('Subject is required');
+                return;
+            }
+            if (!assignmentData.dueDate) {
+                showError('Due date is required');
+                return;
+            }
+            if (!assignmentData.maxMarks || assignmentData.maxMarks < 1) {
+                showError('Max marks must be a positive number');
+                return;
+            }
             
             console.log('Creating assignment with data:', assignmentData);
             
@@ -348,7 +374,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.reset();
                     await loadAssignments();
                 } else {
-                    const data = await response.json();
+                    const responseText = await response.text();
+                    console.error('Raw error response:', responseText);
+                    
+                    let data;
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (e) {
+                        console.error('Failed to parse error response:', e);
+                        showError(`Server error: ${responseText || 'Unknown error'}`);
+                        return;
+                    }
                     console.error('Assignment creation failed:', data);
                     if (data.errors && Array.isArray(data.errors)) {
                         const errorMessages = data.errors.map(err => err.msg).join(', ');
