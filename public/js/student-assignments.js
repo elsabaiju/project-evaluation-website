@@ -399,6 +399,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        // Don't set Content-Type for FormData - browser will set it automatically with boundary
                     },
                     body: formData
                 });
