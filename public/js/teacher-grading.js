@@ -277,10 +277,16 @@ function openEvaluationModal(submissionId) {
     if (modal && form) {
         // Populate form with existing data if already evaluated
         document.getElementById('evaluationSubmissionId').value = submission._id;
-        document.getElementById('evaluationMarks').value = submission.isEvaluated ? submission.marks : '';
-        document.getElementById('evaluationMarks').max = submission.assignmentMaxMarks;
-        document.getElementById('evaluationFeedback').value = submission.feedback || '';
-        document.getElementById('evaluationComment').value = submission.comment || '';
+        document.getElementById('marks').value = submission.isEvaluated ? submission.marks : '';
+        document.getElementById('marks').max = submission.assignmentMaxMarks;
+        document.getElementById('feedback').value = submission.feedback || '';
+        document.getElementById('comment').value = submission.comment || '';
+        
+        // Update max marks display
+        const maxMarksDisplay = document.getElementById('maxMarksDisplay');
+        if (maxMarksDisplay) {
+            maxMarksDisplay.textContent = ` / ${submission.assignmentMaxMarks}`;
+        }
         
         // Update submission info in the modal
         const submissionDetails = document.getElementById('submissionDetails');
@@ -458,9 +464,9 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             
             const submissionId = document.getElementById('evaluationSubmissionId').value;
-            const marks = parseInt(document.getElementById('evaluationMarks').value);
-            const feedback = document.getElementById('evaluationFeedback').value;
-            const comment = document.getElementById('evaluationComment').value;
+            const marks = parseInt(document.getElementById('marks').value);
+            const feedback = document.getElementById('feedback').value;
+            const comment = document.getElementById('comment').value;
             
             try {
                 const response = await fetch(`${API_BASE}/assignments/submissions/${submissionId}/evaluate`, {
