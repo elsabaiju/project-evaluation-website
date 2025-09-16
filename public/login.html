@@ -18,32 +18,49 @@
 
         <main class="main-content">
             <div class="auth-form-container">
-                <h2>Login</h2>
+                <div class="login-header">
+                    <div class="login-icon">🔐</div>
+                    <h2>Welcome Back!</h2>
+                    <p>Sign in to access your dashboard</p>
+                </div>
+                
                 <form id="loginForm" class="auth-form">
                     <div class="form-group">
-                        <label for="username">Username or Email:</label>
-                        <input type="text" id="username" name="username" required>
+                        <div class="input-icon">
+                            <span class="icon">👤</span>
+                            <input type="text" id="username" name="username" placeholder="Username or Email" required>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="password">Password:</label>
-                        <input type="password" id="password" name="password" required>
+                        <div class="input-icon">
+                            <span class="icon">🔒</span>
+                            <input type="password" id="password" name="password" placeholder="Password" required>
+                        </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary login-btn">
+                        <span>Sign In</span>
+                        <span class="btn-icon">→</span>
+                    </button>
                 </form>
 
                 <div id="errorMessage" class="error-message" style="display: none;"></div>
                 <div id="successMessage" class="success-message" style="display: none;"></div>
 
-                <p class="auth-link">
-                    Don't have an account? <a href="register.html">Register here</a>
-                </p>
+                <div class="auth-divider">
+                    <span>New to our platform?</span>
+                </div>
+
+                <a href="register.html" class="auth-link-btn">
+                    <span>Create Account</span>
+                    <span class="link-icon">✨</span>
+                </a>
             </div>
         </main>
 
         <footer class="footer">
-            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+            <p>&copy; 2025 Project Evaluation System. All rights reserved.</p>
         </footer>
     </div>
 

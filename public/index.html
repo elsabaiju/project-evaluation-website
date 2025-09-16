@@ -18,25 +18,27 @@
                 <h2>Welcome to the Project Evaluation System</h2>
                 <p>This platform allows students to submit assignments and teachers to evaluate them efficiently.</p>
                 
-                <div class="features">
-                    <div class="feature-card">
-                        <h3>For Students</h3>
-                        <ul>
-                            <li>View upcoming assignments</li>
-                            <li>Submit projects easily</li>
-                            <li>Track your grades and feedback</li>
-                            <li>View teacher comments</li>
-                        </ul>
+                <div class="role-selection">
+                    <div class="role-card student-card" onclick="window.location.href='register.html?role=student'">
+                        <div class="role-icon">🎓</div>
+                        <h3>I'm a Student</h3>
+                        <p>Submit assignments, track grades, and receive feedback</p>
+                        <div class="role-features">
+                            <span class="feature-tag">📚 View Assignments</span>
+                            <span class="feature-tag">📤 Submit Projects</span>
+                            <span class="feature-tag">📊 Track Grades</span>
+                        </div>
                     </div>
                     
-                    <div class="feature-card">
-                        <h3>For Teachers</h3>
-                        <ul>
-                            <li>Create and manage assignments</li>
-                            <li>Review student submissions</li>
-                            <li>Assign grades and feedback</li>
-                            <li>Track student progress</li>
-                        </ul>
+                    <div class="role-card teacher-card" onclick="window.location.href='register.html?role=teacher'">
+                        <div class="role-icon">👨‍🏫</div>
+                        <h3>I'm a Teacher</h3>
+                        <p>Create assignments, evaluate submissions, and provide feedback</p>
+                        <div class="role-features">
+                            <span class="feature-tag">📝 Create Assignments</span>
+                            <span class="feature-tag">✅ Grade Submissions</span>
+                            <span class="feature-tag">💬 Provide Feedback</span>
+                        </div>
                     </div>
                 </div>
 
@@ -48,7 +50,7 @@
         </main>
 
         <footer class="footer">
-            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+            <p>&copy; 2025 Project Evaluation System. All rights reserved.</p>
         </footer>
     </div>
 </body>

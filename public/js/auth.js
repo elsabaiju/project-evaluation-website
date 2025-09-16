@@ -111,13 +111,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Register form
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
-        // Show/hide student ID field based on role
+        // Handle role selection with new interactive buttons
         const roleSelect = document.getElementById('role');
         const studentIdGroup = document.getElementById('studentIdGroup');
+        const roleOptions = document.querySelectorAll('.role-option');
         
-        if (roleSelect && studentIdGroup) {
-            roleSelect.addEventListener('change', function() {
-                if (this.value === 'student') {
+        // Add click handlers for role selection
+        roleOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const selectedRole = this.dataset.role;
+                
+                // Update visual selection
+                roleOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Update hidden input
+                if (roleSelect) {
+                    roleSelect.value = selectedRole;
+                }
+                
+                // Show/hide student ID field
+                if (selectedRole === 'student') {
                     studentIdGroup.style.display = 'block';
                     document.getElementById('studentId').required = true;
                 } else {
@@ -125,6 +139,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('studentId').required = false;
                 }
             });
+        });
+        
+        // Handle URL parameter for pre-selecting role
+        const urlParams = new URLSearchParams(window.location.search);
+        const preselectedRole = urlParams.get('role');
+        if (preselectedRole && (preselectedRole === 'student' || preselectedRole === 'teacher')) {
+            const targetOption = document.querySelector(`[data-role="${preselectedRole}"]`);
+            if (targetOption) {
+                targetOption.click();
+            }
         }
 
         registerForm.addEventListener('submit', async function(e) {

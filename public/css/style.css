@@ -765,6 +765,286 @@ body {
     color: #666;
 }
 
+/* Interactive Role Selection Styles */
+.role-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.role-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.role-card:hover::before {
+    left: 100%;
+}
+
+.role-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.student-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.teacher-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.role-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.role-card h3 {
+    margin: 15px 0 10px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.role-card p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+.role-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.feature-tag {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    backdrop-filter: blur(10px);
+}
+
+/* Enhanced Auth Form Styles */
+.login-header, .register-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-icon, .register-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.login-header h2, .register-header h2 {
+    margin: 10px 0 5px 0;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.login-header p, .register-header p {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon .icon {
+    position: absolute;
+    left: 15px;
+    font-size: 1.2rem;
+    z-index: 2;
+}
+
+.input-icon input {
+    padding-left: 50px !important;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.input-icon input:focus {
+    background: white;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.login-btn, .register-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn:hover, .register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+}
+
+.btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.login-btn:hover .btn-icon, .register-btn:hover .btn-icon {
+    transform: translateX(5px);
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 25px 0;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e9ecef;
+}
+
+.auth-divider span {
+    background: white;
+    padding: 0 20px;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.auth-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.auth-link-btn:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    transform: translateY(-1px);
+}
+
+.link-icon {
+    transition: transform 0.3s ease;
+}
+
+.auth-link-btn:hover .link-icon {
+    transform: translateX(3px);
+}
+
+/* Role Selector for Register Page */
+.role-selector {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    justify-content: center;
+}
+
+.role-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 30px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+    min-width: 120px;
+}
+
+.role-option:hover {
+    border-color: #007bff;
+    background: #e7f3ff;
+    transform: translateY(-2px);
+}
+
+.role-option.selected {
+    border-color: #007bff;
+    background: #007bff;
+    color: white;
+}
+
+.role-badge {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.role-option span {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Responsive Design for New Elements */
+@media (max-width: 768px) {
+    .role-selection {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .role-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .role-option {
+        padding: 15px 20px;
+        min-width: auto;
+    }
+}
+
 /* Teacher-specific styles */
 .attention-list {
     background: white;
