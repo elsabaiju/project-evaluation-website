@@ -48,13 +48,22 @@ const upload = multer({
 router.post('/', auth, requireRole(['teacher']), [
     body('title').trim().isLength({ min: 3 }).withMessage('Title must be at least 3 characters'),
     body('description').trim().isLength({ min: 10 }).withMessage('Description must be at least 10 characters'),
-    body('dueDate').isISO8601().withMessage('Please provide a valid due date'),
+    body('dueDate').custom((value) => {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+            throw new Error('Please provide a valid due date');
+        }
+        return true;
+    }),
     body('maxMarks').isInt({ min: 1 }).withMessage('Max marks must be a positive integer'),
     body('subject').trim().isLength({ min: 2 }).withMessage('Subject is required')
 ], async (req, res) => {
     try {
+        console.log('Assignment creation request body:', req.body);
+        
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log('Validation errors:', errors.array());
             return res.status(400).json({ errors: errors.array() });
         }
 

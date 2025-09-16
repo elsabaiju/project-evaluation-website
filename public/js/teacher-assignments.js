@@ -402,10 +402,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 title: formData.get('title'),
                 description: formData.get('description'),
                 subject: formData.get('subject'),
-                dueDate: formData.get('dueDate'),
+                dueDate: new Date(formData.get('dueDate')).toISOString(),
                 maxMarks: parseInt(formData.get('maxMarks')),
                 instructions: formData.get('instructions')
             };
+            
+            console.log('Creating assignment with data:', assignmentData);
             
             try {
                 const response = await fetch(`${API_BASE}/assignments`, {
@@ -414,14 +416,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(assignmentData)
                 });
                 
+                console.log('Assignment creation response status:', response.status);
+                
                 if (response.ok) {
+                    const result = await response.json();
+                    console.log('Assignment created successfully:', result);
                     showSuccess('Assignment created successfully!');
                     closeModal('createAssignmentModal');
                     this.reset();
                     await loadAssignments();
                 } else {
                     const data = await response.json();
-                    showError(data.message || 'Failed to create assignment');
+                    console.error('Assignment creation failed:', data);
+                    if (data.errors && Array.isArray(data.errors)) {
+                        const errorMessages = data.errors.map(err => err.msg).join(', ');
+                        showError(`Validation errors: ${errorMessages}`);
+                    } else {
+                        showError(data.message || 'Failed to create assignment');
+                    }
                 }
             } catch (error) {
                 console.error('Error creating assignment:', error);
