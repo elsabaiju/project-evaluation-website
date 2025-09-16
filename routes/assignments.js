@@ -329,4 +329,47 @@ router.put('/submissions/:submissionId/evaluate', auth, requireRole(['teacher'])
     }
 });
 
+// Download submission file
+router.get('/submissions/:submissionId/download', auth, async (req, res) => {
+    try {
+        const submission = await Submission.findById(req.params.submissionId)
+            .populate('assignment')
+            .populate('student', 'fullName username');
+
+        if (!submission) {
+            return res.status(404).json({ message: 'Submission not found' });
+        }
+
+        // Check if user has permission to download
+        // Teachers can download submissions for their assignments
+        // Students can download their own submissions
+        if (req.user.role === 'teacher') {
+            if (submission.assignment.teacher.toString() !== req.user._id.toString()) {
+                return res.status(403).json({ message: 'Access denied' });
+            }
+        } else if (req.user.role === 'student') {
+            if (submission.student._id.toString() !== req.user._id.toString()) {
+                return res.status(403).json({ message: 'Access denied' });
+            }
+        }
+
+        // Check if file exists
+        if (!fs.existsSync(submission.filePath)) {
+            return res.status(404).json({ message: 'File not found on server' });
+        }
+
+        // Set appropriate headers for file download
+        res.setHeader('Content-Disposition', `attachment; filename="${submission.fileName}"`);
+        res.setHeader('Content-Type', 'application/octet-stream');
+
+        // Stream the file
+        const fileStream = fs.createReadStream(submission.filePath);
+        fileStream.pipe(res);
+
+    } catch (error) {
+        console.error('Download file error:', error);
+        res.status(500).json({ message: 'Server error downloading file' });
+    }
+});
+
 module.exports = router;

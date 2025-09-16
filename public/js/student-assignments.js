@@ -395,6 +395,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const assignmentId = formData.get('assignmentId');
             
             try {
+                console.log('Submitting assignment:', assignmentId);
+                console.log('FormData contents:', formData.get('file'));
+                
                 const response = await fetch(`${API_BASE}/assignments/${assignmentId}/submit`, {
                     method: 'POST',
                     headers: {
@@ -404,17 +407,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: formData
                 });
                 
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
                 if (response.ok) {
+                    const data = await response.json();
+                    console.log('Success response:', data);
                     showSuccess('Assignment submitted successfully!');
                     closeModal('submissionModal');
                     this.reset();
                     await loadAssignments();
                 } else {
                     const data = await response.json();
+                    console.error('Server error response:', data);
                     showError(data.message || 'Failed to submit assignment');
                 }
             } catch (error) {
-                console.error('Error submitting assignment:', error);
+                console.error('Network error details:', error);
+                console.error('Error type:', error.name);
+                console.error('Error message:', error.message);
                 showError('Network error submitting assignment');
             }
         });
