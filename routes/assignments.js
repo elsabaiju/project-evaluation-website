@@ -51,7 +51,7 @@ router.post('/', auth, requireRole(['teacher']), async (req, res) => {
         console.log('Request body:', req.body);
         console.log('User:', req.user);
         
-        const { title, description, dueDate, maxMarks, subject, instructions } = req.body;
+        const { title, description, dueDate, maxMarks, subject, instructions, assignedStudents } = req.body;
         
         // Manual validation
         if (!title || title.trim().length < 3) {
@@ -68,6 +68,9 @@ router.post('/', auth, requireRole(['teacher']), async (req, res) => {
         }
         if (!maxMarks || parseInt(maxMarks) < 1) {
             return res.status(400).json({ message: 'Max marks must be a positive integer' });
+        }
+        if (!assignedStudents || !Array.isArray(assignedStudents) || assignedStudents.length === 0) {
+            return res.status(400).json({ message: 'Please select at least one student to assign this assignment to' });
         }
 
         // Convert dueDate to proper Date object
@@ -86,9 +89,10 @@ router.post('/', auth, requireRole(['teacher']), async (req, res) => {
             description,
             teacher: req.user._id,
             dueDate: parsedDueDate,
-            maxMarks,
+            maxMarks: parseInt(maxMarks),
             subject,
-            instructions: instructions || ''
+            instructions: instructions || '',
+            assignedStudents: assignedStudents
         });
 
         await assignment.save();
@@ -109,14 +113,17 @@ router.get('/', auth, async (req, res) => {
     try {
         let query = { isActive: true };
         
-        // If student, get all assignments
         // If teacher, get only their assignments
+        // If student, get only assignments assigned to them
         if (req.user.role === 'teacher') {
             query.teacher = req.user._id;
+        } else {
+            query.assignedStudents = req.user._id;
         }
 
         const assignments = await Assignment.find(query)
             .populate('teacher', 'fullName username')
+            .populate('assignedStudents', 'fullName username')
             .sort({ createdAt: -1 });
 
         // If student, also get submission status for each assignment

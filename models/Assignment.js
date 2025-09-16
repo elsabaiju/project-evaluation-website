@@ -33,6 +33,10 @@ const assignmentSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    assignedStudents: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     isActive: {
         type: Boolean,
         default: true

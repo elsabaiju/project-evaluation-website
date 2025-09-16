@@ -277,21 +277,75 @@ function closeModal(modalId) {
     }
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
-    initDashboard();
-    
-    // Logout button
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/';
+// Load students for assignment creation
+async function loadStudents() {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/users/students', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         });
+
+        if (response.ok) {
+            const students = await response.json();
+            displayStudentsList(students);
+        } else {
+            console.error('Failed to load students');
+        }
+    } catch (error) {
+        console.error('Error loading students:', error);
+    }
+}
+
+// Display students list with checkboxes
+function displayStudentsList(students) {
+    const studentsList = document.getElementById('studentsList');
+    if (!studentsList) return;
+
+    studentsList.innerHTML = '';
+    
+    students.forEach(student => {
+        const studentItem = document.createElement('div');
+        studentItem.className = 'student-item';
+        studentItem.innerHTML = `
+            <input type="checkbox" id="student_${student._id}" name="assignedStudents" value="${student._id}">
+            <label for="student_${student._id}">${student.fullName} (${student.username})</label>
+        `;
+        studentsList.appendChild(studentItem);
+    });
+}
+
+// Handle select all students
+function handleSelectAllStudents(event) {
+    const isChecked = event.target.checked;
+    const studentCheckboxes = document.querySelectorAll('input[name="assignedStudents"]');
+    
+    studentCheckboxes.forEach(checkbox => {
+        checkbox.checked = isChecked;
+    });
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', async function() {
+    if (!checkAuth()) return;
+    
+    await loadAssignments();
+    await loadStudents();
+    
+    // Set up create assignment form
+    const createForm = document.getElementById('createAssignmentForm');
+    if (createForm) {
+        createForm.addEventListener('submit', handleCreateAssignment);
     }
     
-    // Create assignment button
+    // Set up select all students functionality
+    const selectAllCheckbox = document.getElementById('selectAllStudents');
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', handleSelectAllStudents);
+    }
+    
     const createAssignmentBtn = document.getElementById('createAssignmentBtn');
     if (createAssignmentBtn) {
         createAssignmentBtn.addEventListener('click', openCreateAssignmentModal);
@@ -324,13 +378,21 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Raw due date from form:', rawDueDate);
             console.log('All form data:', Object.fromEntries(formData));
             
+            // Get selected students
+            const selectedStudents = [];
+            const studentCheckboxes = document.querySelectorAll('input[name="assignedStudents"]:checked');
+            studentCheckboxes.forEach(checkbox => {
+                selectedStudents.push(checkbox.value);
+            });
+            
             const assignmentData = {
                 title: formData.get('title'),
                 description: formData.get('description'),
                 subject: formData.get('subject'),
                 dueDate: rawDueDate,
                 maxMarks: parseInt(formData.get('maxMarks')),
-                instructions: formData.get('instructions') || ''
+                instructions: formData.get('instructions') || '',
+                assignedStudents: selectedStudents
             };
             
             // Validate required fields on client side
@@ -351,7 +413,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             if (!assignmentData.maxMarks || assignmentData.maxMarks < 1) {
-                showError('Max marks must be a positive number');
+                showError('Maximum marks must be at least 1');
+                return;
+            }
+            if (assignmentData.assignedStudents.length === 0) {
+                showError('Please select at least one student to assign this assignment to');
                 return;
             }
             

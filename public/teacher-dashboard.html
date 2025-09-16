@@ -102,8 +102,21 @@
                             <input type="number" id="assignmentMaxMarks" name="maxMarks" required min="1">
                         </div>
                         <div class="form-group">
-                            <label for="assignmentInstructions">Instructions (Optional):</label>
-                            <textarea id="assignmentInstructions" name="instructions" rows="3"></textarea>
+                            <label for="instructions">Instructions (Optional)</label>
+                            <textarea id="instructions" name="instructions" rows="3" placeholder="Additional instructions for students..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignedStudents">Assign to Students</label>
+                            <div class="student-selection">
+                                <div class="select-all-container">
+                                    <label>
+                                        <input type="checkbox" id="selectAllStudents"> Select All Students
+                                    </label>
+                                </div>
+                                <div id="studentsList" class="students-list">
+                                    <!-- Students will be loaded here -->
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Create Assignment</button>
                     </form>

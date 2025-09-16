@@ -4,17 +4,25 @@ const { auth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Get all users (Admin only - for future use)
+router.get('/', auth, requireRole(['admin']), async (req, res) => {
+    try {
+        const users = await User.find().select('-password');
+        res.json(users);
+    } catch (error) {
+        console.error('Get users error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // Get all students (Teacher only)
 router.get('/students', auth, requireRole(['teacher']), async (req, res) => {
     try {
-        const students = await User.find({ role: 'student' })
-            .select('-password')
-            .sort({ fullName: 1 });
-
-        res.json({ students });
+        const students = await User.find({ role: 'student' }).select('-password');
+        res.json(students);
     } catch (error) {
         console.error('Get students error:', error);
-        res.status(500).json({ message: 'Server error fetching students' });
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

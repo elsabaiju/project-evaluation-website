@@ -1045,6 +1045,57 @@ body {
     }
 }
 
+/* Student selection styles */
+.student-selection {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.select-all-container {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.select-all-container label {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.students-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.student-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.student-item:hover {
+    background-color: #f0f8ff;
+}
+
+.student-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.student-item label {
+    cursor: pointer;
+    flex: 1;
+    margin: 0;
+}
+
 /* Teacher-specific styles */
 .attention-list {
     background: white;
