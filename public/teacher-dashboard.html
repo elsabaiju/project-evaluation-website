@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="teacher-dashboard.html" class="nav-link active">Dashboard</a>
+                    <a href="teacher-assignments.html" class="nav-link">My Assignments</a>
+                    <a href="teacher-grading.html" class="nav-link">To Grade</a>
+                    <a href="teacher-history.html" class="nav-link">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div id="teacherDashboard" class="dashboard">
+                <h2>Teacher Dashboard</h2>
+                
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalAssignments">0</h3>
+                        <p>Total Assignments</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalSubmissions">0</h3>
+                        <p>Total Submissions</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="pendingGrading">0</h3>
+                        <p>Pending Grading</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="averageGrade">-</h3>
+                        <p>Class Average</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-section">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Recent activities will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Assignments Needing Attention -->
+                <div class="dashboard-section">
+                    <h3>Assignments Needing Attention</h3>
+                    <div id="needsAttention" class="attention-list">
+                        <!-- Assignments needing attention will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button id="createAssignmentBtn" class="btn btn-primary">Create New Assignment</button>
+                        <a href="teacher-grading.html" class="btn btn-secondary">Grade Submissions</a>
+                        <a href="teacher-history.html" class="btn btn-secondary">View History</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Assignment Modal -->
+            <div id="createAssignmentModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h3>Create New Assignment</h3>
+                    <form id="createAssignmentForm">
+                        <div class="form-group">
+                            <label for="assignmentTitle">Title:</label>
+                            <input type="text" id="assignmentTitle" name="title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentDescription">Description:</label>
+                            <textarea id="assignmentDescription" name="description" required rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentSubject">Subject:</label>
+                            <input type="text" id="assignmentSubject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentDueDate">Due Date:</label>
+                            <input type="datetime-local" id="assignmentDueDate" name="dueDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentMaxMarks">Maximum Marks:</label>
+                            <input type="number" id="assignmentMaxMarks" name="maxMarks" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentInstructions">Instructions (Optional):</label>
+                            <textarea id="assignmentInstructions" name="instructions" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Assignment</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/teacher-dashboard.js"></script>
+</body>
+</html>

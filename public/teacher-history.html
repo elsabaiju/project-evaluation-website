@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment History - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="teacher-dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="teacher-assignments.html" class="nav-link">My Assignments</a>
+                    <a href="teacher-grading.html" class="nav-link">To Grade</a>
+                    <a href="teacher-history.html" class="nav-link active">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard">
+                <h2>Assignment History</h2>
+                
+                <!-- Summary Stats -->
+                <div class="history-summary">
+                    <div class="summary-card">
+                        <h3 id="totalAssignments">0</h3>
+                        <p>Total Assignments</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="totalSubmissions">0</h3>
+                        <p>Total Submissions</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="gradedSubmissions">0</h3>
+                        <p>Graded Submissions</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="averageClassGrade">-</h3>
+                        <p>Class Average</p>
+                    </div>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-filter="all">All Assignments</button>
+                    <button class="tab-btn" data-filter="graded">Fully Graded</button>
+                    <button class="tab-btn" data-filter="partial">Partially Graded</button>
+                    <button class="tab-btn" data-filter="ungraded">Ungraded</button>
+                </div>
+
+                <!-- Filter and Search -->
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search assignments...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="subjectFilter">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+                    <div class="sort-box">
+                        <select id="sortSelect">
+                            <option value="createdAt">Sort by Created Date</option>
+                            <option value="dueDate">Sort by Due Date</option>
+                            <option value="title">Sort by Title</option>
+                            <option value="subject">Sort by Subject</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- History List -->
+                <div id="historyContainer" class="history-assignments-list">
+                    <!-- History items will be loaded here -->
+                </div>
+
+                <!-- Assignment History Detail Modal -->
+                <div id="historyDetailModal" class="modal" style="display: none;">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <div id="historyDetailContent">
+                            <!-- Detailed history item will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading assignment history...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/teacher-history.js"></script>
+</body>
+</html>

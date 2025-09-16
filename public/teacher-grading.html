@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments to Grade - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="teacher-dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="teacher-assignments.html" class="nav-link">My Assignments</a>
+                    <a href="teacher-grading.html" class="nav-link active">To Grade</a>
+                    <a href="teacher-history.html" class="nav-link">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard">
+                <h2>Assignments to Grade</h2>
+                
+                <!-- Filter and Search -->
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by student name or assignment...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="assignmentFilter">
+                            <option value="">All Assignments</option>
+                        </select>
+                    </div>
+                    <div class="sort-box">
+                        <select id="sortSelect">
+                            <option value="submittedAt">Sort by Submission Date</option>
+                            <option value="dueDate">Sort by Due Date</option>
+                            <option value="studentName">Sort by Student Name</option>
+                            <option value="assignmentTitle">Sort by Assignment</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submissions to Grade -->
+                <div id="submissionsContainer" class="submissions-grid">
+                    <!-- Submissions will be loaded here -->
+                </div>
+
+                <!-- Evaluation Modal -->
+                <div id="evaluationModal" class="modal" style="display: none;">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <h3>Grade Submission</h3>
+                        <div id="submissionDetails" class="submission-details-section">
+                            <!-- Submission details will be shown here -->
+                        </div>
+                        <form id="evaluationForm">
+                            <input type="hidden" id="evaluationSubmissionId" name="submissionId">
+                            <div class="form-group">
+                                <label for="marks">Marks:</label>
+                                <input type="number" id="marks" name="marks" required min="0">
+                                <span id="maxMarksDisplay"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="feedback">Feedback:</label>
+                                <textarea id="feedback" name="feedback" rows="4" placeholder="Provide detailed feedback on the student's work..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea id="comment" name="comment" rows="3" placeholder="Additional comments for the student..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Submit Grade</button>
+                                <button type="button" class="btn btn-secondary" onclick="closeModal('evaluationModal')">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bulk Grading Modal -->
+                <div id="bulkGradingModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Bulk Grade Assignment</h3>
+                        <div id="bulkGradingContent">
+                            <!-- Bulk grading content will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading submissions to grade...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/teacher-grading.js"></script>
+</body>
+</html>

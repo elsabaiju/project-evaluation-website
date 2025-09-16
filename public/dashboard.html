@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <span id="userInfo" class="user-info"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <!-- Student Dashboard -->
+            <div id="studentDashboard" class="dashboard" style="display: none;">
+                <h2>Student Dashboard</h2>
+                
+                <div class="dashboard-section">
+                    <h3>My Assignments</h3>
+                    <div id="studentAssignments" class="assignments-grid">
+                        <!-- Assignments will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Assignment Submission Modal -->
+                <div id="submissionModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Submit Assignment</h3>
+                        <form id="submissionForm" enctype="multipart/form-data">
+                            <input type="hidden" id="assignmentId" name="assignmentId">
+                            <div class="form-group">
+                                <label for="submissionFile">Select File:</label>
+                                <input type="file" id="submissionFile" name="file" required>
+                                <small>Allowed formats: PDF, DOC, DOCX, TXT, ZIP, RAR, Images (Max: 10MB)</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Assignment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teacher Dashboard -->
+            <div id="teacherDashboard" class="dashboard" style="display: none;">
+                <h2>Teacher Dashboard</h2>
+                
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h3>My Assignments</h3>
+                        <button id="createAssignmentBtn" class="btn btn-primary">Create New Assignment</button>
+                    </div>
+                    <div id="teacherAssignments" class="assignments-grid">
+                        <!-- Assignments will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Create Assignment Modal -->
+                <div id="createAssignmentModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Create New Assignment</h3>
+                        <form id="createAssignmentForm">
+                            <div class="form-group">
+                                <label for="assignmentTitle">Title:</label>
+                                <input type="text" id="assignmentTitle" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentDescription">Description:</label>
+                                <textarea id="assignmentDescription" name="description" required rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentSubject">Subject:</label>
+                                <input type="text" id="assignmentSubject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentDueDate">Due Date:</label>
+                                <input type="datetime-local" id="assignmentDueDate" name="dueDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentMaxMarks">Maximum Marks:</label>
+                                <input type="number" id="assignmentMaxMarks" name="maxMarks" required min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentInstructions">Instructions (Optional):</label>
+                                <textarea id="assignmentInstructions" name="instructions" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Assignment</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Submissions Modal -->
+                <div id="submissionsModal" class="modal" style="display: none;">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <h3>Assignment Submissions</h3>
+                        <div id="submissionsList" class="submissions-list">
+                            <!-- Submissions will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluation Modal -->
+                <div id="evaluationModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Evaluate Submission</h3>
+                        <div id="submissionDetails" class="submission-details"></div>
+                        <form id="evaluationForm">
+                            <input type="hidden" id="evaluationSubmissionId" name="submissionId">
+                            <div class="form-group">
+                                <label for="marks">Marks:</label>
+                                <input type="number" id="marks" name="marks" required min="0">
+                                <span id="maxMarksDisplay"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="feedback">Feedback:</label>
+                                <textarea id="feedback" name="feedback" rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea id="comment" name="comment" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Evaluation</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

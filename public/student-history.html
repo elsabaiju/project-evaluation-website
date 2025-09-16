@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade History - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="student-dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="student-assignments.html" class="nav-link">Assignments</a>
+                    <a href="student-history.html" class="nav-link active">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard">
+                <h2>Grade History</h2>
+                
+                <!-- Summary Stats -->
+                <div class="history-summary">
+                    <div class="summary-card">
+                        <h3 id="totalEvaluated">0</h3>
+                        <p>Assignments Graded</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="overallAverage">-</h3>
+                        <p>Overall Average</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="highestGrade">-</h3>
+                        <p>Highest Grade</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3 id="lowestGrade">-</h3>
+                        <p>Lowest Grade</p>
+                    </div>
+                </div>
+
+                <!-- Grade Chart -->
+                <div class="dashboard-section">
+                    <h3>Grade Trend</h3>
+                    <div id="gradeChart" class="chart-container">
+                        <canvas id="gradeCanvas" width="800" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Filter and Search -->
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search by assignment or subject...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="subjectFilter">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+                    <div class="sort-box">
+                        <select id="sortSelect">
+                            <option value="evaluatedAt">Sort by Date</option>
+                            <option value="marks">Sort by Grade</option>
+                            <option value="title">Sort by Title</option>
+                            <option value="subject">Sort by Subject</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- History List -->
+                <div class="dashboard-section">
+                    <h3>Assignment History</h3>
+                    <div id="historyContainer" class="history-list">
+                        <!-- History items will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Detailed View Modal -->
+                <div id="historyDetailModal" class="modal" style="display: none;">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <div id="historyDetailContent">
+                            <!-- Detailed history item will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading grade history...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/student-history.js"></script>
+</body>
+</html>

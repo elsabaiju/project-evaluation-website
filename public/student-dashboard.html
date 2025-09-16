@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="student-dashboard.html" class="nav-link active">Dashboard</a>
+                    <a href="student-assignments.html" class="nav-link">Assignments</a>
+                    <a href="student-history.html" class="nav-link">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div id="studentDashboard" class="dashboard">
+                <h2>Student Dashboard</h2>
+                
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="totalAssignments">0</h3>
+                        <p>Total Assignments</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="submittedCount">0</h3>
+                        <p>Submitted</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="evaluatedCount">0</h3>
+                        <p>Evaluated</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="averageGrade">-</h3>
+                        <p>Average Grade</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-section">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list">
+                        <!-- Recent activities will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Deadlines -->
+                <div class="dashboard-section">
+                    <h3>Upcoming Deadlines</h3>
+                    <div id="upcomingDeadlines" class="deadlines-list">
+                        <!-- Upcoming deadlines will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-section">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <a href="student-assignments.html" class="btn btn-primary">View All Assignments</a>
+                        <a href="student-history.html" class="btn btn-secondary">View Grade History</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/student-dashboard.js"></script>
+</body>
+</html>

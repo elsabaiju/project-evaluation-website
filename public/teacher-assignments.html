@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Assignments - Project Evaluation System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Project Evaluation System</h1>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="teacher-dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="teacher-assignments.html" class="nav-link active">My Assignments</a>
+                    <a href="teacher-grading.html" class="nav-link">To Grade</a>
+                    <a href="teacher-history.html" class="nav-link">History</a>
+                </div>
+                <div class="nav-user">
+                    <span id="userInfo" class="user-info"></span>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="dashboard">
+                <div class="section-header">
+                    <h2>My Assignments</h2>
+                    <button id="createAssignmentBtn" class="btn btn-primary">Create New Assignment</button>
+                </div>
+                
+                <!-- Filter and Search -->
+                <div class="controls-bar">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search assignments...">
+                    </div>
+                    <div class="filter-box">
+                        <select id="statusFilter">
+                            <option value="">All Assignments</option>
+                            <option value="active">Active</option>
+                            <option value="overdue">Overdue</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="sort-box">
+                        <select id="sortSelect">
+                            <option value="dueDate">Sort by Due Date</option>
+                            <option value="title">Sort by Title</option>
+                            <option value="subject">Sort by Subject</option>
+                            <option value="createdAt">Sort by Created Date</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Assignments Grid -->
+                <div id="assignmentsContainer" class="assignments-grid">
+                    <!-- Assignments will be loaded here -->
+                </div>
+
+                <!-- Create Assignment Modal -->
+                <div id="createAssignmentModal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>Create New Assignment</h3>
+                        <form id="createAssignmentForm">
+                            <div class="form-group">
+                                <label for="assignmentTitle">Title:</label>
+                                <input type="text" id="assignmentTitle" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentDescription">Description:</label>
+                                <textarea id="assignmentDescription" name="description" required rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentSubject">Subject:</label>
+                                <input type="text" id="assignmentSubject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentDueDate">Due Date:</label>
+                                <input type="datetime-local" id="assignmentDueDate" name="dueDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentMaxMarks">Maximum Marks:</label>
+                                <input type="number" id="assignmentMaxMarks" name="maxMarks" required min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="assignmentInstructions">Instructions (Optional):</label>
+                                <textarea id="assignmentInstructions" name="instructions" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Assignment</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Assignment Details Modal -->
+                <div id="assignmentDetailsModal" class="modal" style="display: none;">
+                    <div class="modal-content large">
+                        <span class="close">&times;</span>
+                        <div id="assignmentDetailsContent">
+                            <!-- Assignment details will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadingMessage" class="loading">Loading assignments...</div>
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Project Evaluation System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/teacher-assignments.js"></script>
+</body>
+</html>
